@@ -8,7 +8,7 @@ const { errors } = require('celebrate');
 
 console.log(process.env.NODE_ENV);
 
-const PORT = process.env.PORT || 80;
+const PORT = process.env.PORT || 3000;
 const routerUsers = require('./routes/users');
 const routerMovies = require('./routes/movies');
 const auth = require('./middlewares/auth');
