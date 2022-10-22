@@ -48,7 +48,6 @@ const addMovie = (req, res, next) => {
 const getMovies = (req, res, next) => {
   Movie.find({})
   .then((cards) => {
-    console.log
     res.send({ data: cards });
   })
   .catch(next);
