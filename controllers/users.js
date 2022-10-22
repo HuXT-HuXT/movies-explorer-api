@@ -104,7 +104,7 @@ const login = (req, res, next) => {
               // secure: true,
               // sameSite: 'none',
             })
-            .send({ message: `Welcome, ${user.name}!` })
+            .send({ message: `Welcome, %username%!` })
         });
     })
     .catch(next);
