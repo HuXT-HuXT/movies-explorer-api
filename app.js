@@ -14,7 +14,7 @@ const routerMovies = require('./routes/movies');
 const auth = require('./middlewares/auth');
 const { createUser, login } = require('./controllers/users');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-const { regex } = require('./constants/constants');
+const NotFound = require('./errors/NotFound');
 
 mongoose.connect('mongodb://localhost:27017/moviesdb', {
   useNewUrlParser: true,

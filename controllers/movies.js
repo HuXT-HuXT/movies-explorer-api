@@ -1,7 +1,7 @@
 const Movie = require('../models/movie');
 const InputError = require('../errors/InputError');
 const NotFound = require('../errors/NotFound');
-const { reset } = require('nodemon');
+const Forbidden = require('../errors/Forbidden');
 
 const addMovie = (req, res, next) => {
   const userId = req.user._id;
@@ -38,7 +38,7 @@ const addMovie = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new InputError('Переданы некорректные данные при создании карточки.'));
+        next(new InputError('Переданы некорректные данные при сохранении фильма.'));
       } else {
         next(err);
       }
@@ -47,8 +47,8 @@ const addMovie = (req, res, next) => {
 
 const getMovies = (req, res, next) => {
   Movie.find({})
-  .then((cards) => {
-    res.send({ data: cards });
+  .then((movies) => {
+    res.send({ data: movies });
   })
   .catch(next);
 };
@@ -58,21 +58,21 @@ const removeMovie = (req, res, next) => {
   const userId = req.user._id;
   Movie.findById(movieId)
     .orFail(() => {
-      throw new NotFound(`Карточка с указанным ${cardId} не найдена.`);
+      throw new NotFound(`Фильм с указанным ${movieId} не найден.`);
     })
     .then((movie) => {
       const owner = movie.owner;
       if (owner !== userId) {
-        throw new Forbidden('Карточка создана другим пользователем.');
+        throw new Forbidden('Фильм сохранён другим пользователем.');
       }
 
       Movie.deleteOne(movie)
-        .then(() => res.send({ data: card }))
+        .then(() => res.send({ data: movie }))
         .catch(next);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        next(new InputError('Невалидный идентификатор карточки.'));
+        next(new InputError('Невалидный идентификатор фильма.'));
       } else {
         next(err);
       }
