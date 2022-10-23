@@ -64,15 +64,11 @@ app.use(errorLogger);
 app.use(errors());
 
 app.use((err, req, res, next) => {
+  const { statusCode = 500, message } = err;
 
-  res.end();
-
-  next();
-});
-
-app.use((err, req, res, next) => {
-
-  res.end();
+  res
+    .status(statusCode)
+    .send({ message: statusCode === 500 ? 'Ошибка по умолчанию' : message });
 
   next();
 });
