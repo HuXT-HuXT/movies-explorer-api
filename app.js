@@ -1,4 +1,4 @@
-require('dotenv').config({ path: '../../.env' });
+require('dotenv').config({ path: '../.env' });
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const express = require('express');
@@ -15,6 +15,7 @@ const auth = require('./middlewares/auth');
 const { createUser, login } = require('./controllers/users');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const NotFound = require('./errors/NotFound');
+const { rateLimiter } = require('./middlewares/rateLimiter');
 
 mongoose.connect('mongodb://localhost:27017/moviesdb', {
   useNewUrlParser: true,
@@ -28,8 +29,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use(requestLogger);
+app.use(rateLimiter);
 
-app.use('/users', auth,routerUsers);
+app.use('/users', auth, routerUsers);
 app.use('/movies', auth, routerMovies);
 app.post('/signin', celebrate({
   body: Joi.object().keys({
