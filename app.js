@@ -7,7 +7,7 @@ const { errors } = require('celebrate');
 
 console.log(process.env.NODE_ENV);
 
-const PORT = process.env.PORT || 80;
+const PORT = process.env.PORT || 3000;
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const NotFound = require('./errors/NotFound');
 const { rateLimiter } = require('./middlewares/rateLimiter');
