@@ -12,7 +12,7 @@ const addMovie = (req, res, next) => {
     year,
     description,
     image,
-    trailer,
+    trailerLink,
     nameRU,
     nameEN,
     thumbnail,
@@ -26,7 +26,7 @@ const addMovie = (req, res, next) => {
     year,
     description,
     image,
-    trailer,
+    trailerLink,
     nameRU,
     nameEN,
     thumbnail,
@@ -47,21 +47,21 @@ const addMovie = (req, res, next) => {
 
 const getMovies = (req, res, next) => {
   Movie.find({})
-  .then((movies) => {
-    res.send({ data: movies });
-  })
-  .catch(next);
+    .then((movies) => {
+      res.send({ data: movies });
+    })
+    .catch(next);
 };
 
 const removeMovie = (req, res, next) => {
-  const { movieId } = req.params;
+  const { _id } = req.params;
   const userId = req.user._id;
-  Movie.findById(movieId)
+  Movie.findById(_id)
     .orFail(() => {
-      throw new NotFound(`Фильм с указанным ${movieId} не найден.`);
+      throw new NotFound(`Фильм с указанным ${_id} не найден.`);
     })
     .then((movie) => {
-      const owner = movie.owner;
+      const owner = movie.owner.toString();
       if (owner !== userId) {
         throw new Forbidden('Фильм сохранён другим пользователем.');
       }

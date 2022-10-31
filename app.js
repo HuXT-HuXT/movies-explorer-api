@@ -3,21 +3,16 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const express = require('express');
 const mongoose = require('mongoose');
-const { celebrate, Joi } = require('celebrate');
 const { errors } = require('celebrate');
 
 console.log(process.env.NODE_ENV);
 
-const PORT = process.env.PORT || 3000;
-const routerUsers = require('./routes/users');
-const routerMovies = require('./routes/movies');
-const auth = require('./middlewares/auth');
-const { createUser, login } = require('./controllers/users');
+const PORT = process.env.PORT || 80;
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const NotFound = require('./errors/NotFound');
 const { rateLimiter } = require('./middlewares/rateLimiter');
 
-mongoose.connect('mongodb://localhost:27017/moviesdb', {
+mongoose.connect(process.env.NODE_ENV === 'production' ? process.env.DB : 'mongodb://localhost:27017/testmoviesdb', {
   useNewUrlParser: true,
   autoIndex: true,
 });
@@ -31,23 +26,12 @@ app.use(cookieParser());
 app.use(requestLogger);
 app.use(rateLimiter);
 
-app.use('/users', auth, routerUsers);
-app.use('/movies', auth, routerMovies);
-app.post('/signin', celebrate({
-  body: Joi.object().keys({
-    email: Joi.string().email().required(),
-    password: Joi.string().required(),
-  }),
-}), login);
-app.post('/signup', celebrate({
-  body: Joi.object().keys({
-    email: Joi.string().email().required(),
-    password: Joi.string().required(),
-    name: Joi.string().min(2).max(30),
-  }),
-}), createUser);
+app.use(require('./routes/sign'));
+app.use(require('./middlewares/auth'));
+app.use(require('./routes/users'));
+app.use(require('./routes/movies'));
 
-app.get('/signout', auth, (req, res) => {
+app.get('/signout', (req, res) => {
   res
     .cookie('jwt', '*', {
       maxAge: 10,
@@ -58,7 +42,7 @@ app.get('/signout', auth, (req, res) => {
     .send({ message: 'bye bye' });
 });
 
-app.all('*', auth, () => {
+app.all('*', () => {
   throw new NotFound('404! Страница не найдена.');
 });
 
