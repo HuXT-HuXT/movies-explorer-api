@@ -40,7 +40,7 @@ const movieSchema = new mongoose.Schema({
       },
     },
   },
-  thumbnail : {
+  thumbnail: {
     type: String,
     required: true,
     validate: {
@@ -55,8 +55,7 @@ const movieSchema = new mongoose.Schema({
     ref: 'user',
   },
   movieId: {
-    type: String,
-    unique: true,
+    type: Number,
     required: true,
   },
   nameRU: {
@@ -67,6 +66,6 @@ const movieSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-})
+});
 
 module.exports = mongoose.model('movie', movieSchema);

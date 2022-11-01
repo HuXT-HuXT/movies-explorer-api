@@ -23,7 +23,7 @@ const createUser = (req, res, next) => {
           const { _id } = user;
           res.send({
             name, email, _id,
-          })
+          });
         })
         .catch((err) => {
           if (err.code === 11000) {
@@ -47,7 +47,6 @@ const getCurrentUser = (req, res, next) => {
       res.send({
         name: user.name,
         email: user.email,
-        _id: user._id,
       });
     })
     .catch(next);
@@ -73,8 +72,11 @@ const updateUser = (req, res, next) => {
       });
     })
     .catch((err) => {
+      console.log(err.codeName);
       if (err.name === 'ValidationError') {
         next(new InputError('Переданы некорректные данные.'));
+      } else if (err.codeName === 'DuplicateKey') {
+        next(new Conflict(`${email} уже занят`));
       } else {
         next(err);
       }
@@ -104,7 +106,7 @@ const login = (req, res, next) => {
               // secure: true,
               // sameSite: 'none',
             })
-            .send({ message: 'Welcome!' })
+            .send({ message: `Welcome, ${user.name}!` });
         });
     })
     .catch(next);
