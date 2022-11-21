@@ -7,10 +7,11 @@ const { errors } = require('celebrate');
 
 console.log(process.env.NODE_ENV);
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 80;
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const NotFound = require('./errors/NotFound');
 const { rateLimiter } = require('./middlewares/rateLimiter');
+const { cors } = require('./middlewares/cors');
 
 mongoose.connect(process.env.NODE_ENV === 'production' ? process.env.DB : 'mongodb://localhost:27017/testmoviesdb', {
   useNewUrlParser: true,
@@ -25,6 +26,7 @@ app.use(cookieParser());
 
 app.use(requestLogger);
 app.use(rateLimiter);
+app.use(cors);
 
 app.use(require('./routes/sign'));
 app.use(require('./middlewares/auth'));
@@ -36,8 +38,8 @@ app.get('/signout', (req, res) => {
     .cookie('jwt', '*', {
       maxAge: 10,
       httpOnly: true,
-      // secure: true,
-      // sameSite: 'none',
+      secure: true,
+      sameSite: 'none',
     })
     .send({ message: 'bye bye' });
 });
