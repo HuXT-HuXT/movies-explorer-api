@@ -38,8 +38,8 @@ app.get('/signout', (req, res) => {
     .cookie('jwt', '*', {
       maxAge: 10,
       httpOnly: true,
-      secure: true,
-      sameSite: 'none',
+      // secure: true,
+      // sameSite: 'none',
     })
     .send({ message: 'bye bye' });
 });

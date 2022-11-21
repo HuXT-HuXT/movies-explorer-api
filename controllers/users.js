@@ -104,8 +104,8 @@ const login = (req, res, next) => {
             .cookie('jwt', token, {
               maxAge: 604800000,
               httpOnly: true,
-              secure: true,
-              sameSite: 'none',
+              // secure: true,
+              // sameSite: 'none',
             })
             .send({ message: `Welcome, ${user.name}!` });
         });
