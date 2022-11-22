@@ -43,7 +43,7 @@ app.get('/signout', (req, res) => {
     })
     .send({ message: 'bye bye' });
 });
-// 40
+// 6:34
 app.all('*', () => {
   throw new NotFound('404! Страница не найдена.');
 });
