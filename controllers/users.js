@@ -72,7 +72,6 @@ const updateUser = (req, res, next) => {
       });
     })
     .catch((err) => {
-      console.log(err.codeName);
       if (err.name === 'ValidationError') {
         next(new InputError('Переданы некорректные данные.'));
       } else if (err.codeName === 'DuplicateKey') {
@@ -99,7 +98,6 @@ const login = (req, res, next) => {
             { _id: user._id },
             NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
           );
-          console.log('cookie =>');
           return res
             .cookie('jwt', token, {
               maxAge: 604800000,
