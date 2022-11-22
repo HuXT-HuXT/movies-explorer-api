@@ -4,6 +4,7 @@ const allowedCors = [
   'http://huxt-huxt.nomoredomains.club/',
   'http://localhost:3000',
   'http://localhost:11432',
+  'https://huxt-huxt.nomoredomains.club/',
 ];
 const DEFAULT_ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE';
 
