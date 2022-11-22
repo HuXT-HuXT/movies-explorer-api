@@ -38,12 +38,12 @@ app.get('/signout', (req, res) => {
     .cookie('jwt', '*', {
       maxAge: 10,
       httpOnly: true,
-      // secure: true,
-      // sameSite: 'none',
+      secure: true,
+      sameSite: 'none',
     })
     .send({ message: 'bye bye' });
 });
-
+// 40
 app.all('*', () => {
   throw new NotFound('404! Страница не найдена.');
 });
