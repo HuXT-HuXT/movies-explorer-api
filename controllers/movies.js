@@ -46,7 +46,8 @@ const addMovie = (req, res, next) => {
 };
 
 const getMovies = (req, res, next) => {
-  Movie.find({})
+  const userId = req.user._id;
+  Movie.find({ owner: userId })
     .then((movies) => {
       res.send({ data: movies });
     })

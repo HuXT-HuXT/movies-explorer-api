@@ -47,6 +47,7 @@ const getCurrentUser = (req, res, next) => {
       res.send({
         name: user.name,
         email: user.email,
+        _id: req.user._id,
       });
     })
     .catch(next);
